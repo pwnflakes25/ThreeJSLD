@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css?family=Alata&display=swap');
+
+
+p {
+  font-family: 'Alata', sans-serif;
+}
+
+
+.banner {
+width:100%;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 650px;
+background: rgb(2,0,36);
+background: radial-gradient(circle, rgba(2,0,36,1) 2%, rgba(9,9,121,1) 53%, rgba(61,0,131,1) 100%);
+clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)
+}
+
+.bannerTitle {
+max-width: 1080px;
+font-style: normal;
+font-weight: 500;
+font-size: 4rem;
+text-align: center;
+line-height: auto;
+display: flex;
+flex-direction: column;
+margin-left: 1rem;
+margin-right: 1rem;
+color: #FFFFFF;
+}
+
+#section2 div{
+  display: block;
+}
+
+/* .subNav {
+  background-color: #303030;
+  height:
+} */
+
+
+.cardGrid {
+  margin-top: 6rem;
+  padding-right: 10rem;
+  padding-left: 10rem;
+  display: flex;
+  justify-content: center;
+}
+
+
+.cardGrid .mat-card {
+  background-color: #F0F0F0;
+}
+
+.example-card {
+  max-width: 15rem;
+  padding-bottom: 4rem;
+  margin-bottom: 2rem;
+  margin-right: 2rem;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.actionButton {
+  display: inline-block;
+  float: left;
+  margin-left: 1rem;
+  box-sizing: content-box;
+  max-width: 10rem;
+  height: 14px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 8px 20px 18px;
+  border: 1px solid #018dc4;
+  border-radius: 12px;
+  color: rgba(255,255,255,0.9);
+  text-align: center;
+  text-indent: -3px;
+  text-overflow: clip;
+  background: linear-gradient(135deg, #182ab2 0, #182ab2 19%, #2879af 81%, #2879af 100%);
+  background-position: 50% 50%;
+  box-shadow: 0px 4px 4px 0 #C0C0C0 ;
+}
