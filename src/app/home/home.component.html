@@ -1,6 +1,6 @@
 
 <div class="container">
-   <section  id="section1" class="banner">
+   <section  id="section1" class="banner" >
      <p class="bannerTitle">An E-Learning Diary of ThreeJS</p>
    </section>
 
@@ -18,12 +18,10 @@
                    <mat-card-title>Cube</mat-card-title>
                    <mat-card-subtitle>Geometry</mat-card-subtitle>
                  </mat-card-header>
-                 <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-                 <mat-card-content>
+                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
+                 <mat-card-content >
                    <p>
-                     The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                     A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                     bred for hunting.
+                     A Basic Cube
                    </p>
                  </mat-card-content>
                  <mat-card-actions>
@@ -37,13 +35,10 @@
                    <mat-card-title>Well</mat-card-title>
                    <mat-card-subtitle>Geometry</mat-card-subtitle>
                  </mat-card-header>
-                 <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
                  <mat-card-content>
                    <p>
-                     The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                     A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                     bred for hunting.
-                   </p>
+                     A Low-poly well
                  </mat-card-content>
                  <mat-card-actions>
                    <button class="actionButton" [routerLink]="['../item' + '/well']">Read More</button>
@@ -56,12 +51,10 @@
                    <mat-card-title>Sphere</mat-card-title>
                    <mat-card-subtitle>Geometry</mat-card-subtitle>
                  </mat-card-header>
-                 <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
                  <mat-card-content>
                    <p>
-                     The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                     A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                     bred for hunting.
+                     Basic Sphere
                    </p>
                  </mat-card-content>
                  <mat-card-actions>
@@ -75,12 +68,10 @@
                    <mat-card-title>Anvil</mat-card-title>
                    <mat-card-subtitle>Geometry</mat-card-subtitle>
                  </mat-card-header>
-                 <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
                  <mat-card-content>
                    <p>
-                     The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                     A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                     bred for hunting.
+                     A slightly rusty anvil
                    </p>
                  </mat-card-content>
                  <mat-card-actions>
@@ -95,7 +86,24 @@
 
         </mat-tab>
 
-        <mat-tab label="More Advance Cases"> Content 2 </mat-tab>
+        <mat-tab label="Interior">
+          <mat-card class="example-card col-lg-4">
+               <mat-card-header>
+                 <div mat-card-avatar class="example-header-image"></div>
+                 <mat-card-title>Living Room 1</mat-card-title>
+                 <mat-card-subtitle>Scene</mat-card-subtitle>
+               </mat-card-header>
+               <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
+               <mat-card-content>
+                  <p>
+                   A sample of a modern living room
+                 </p>
+               </mat-card-content>
+               <mat-card-actions>
+                 <button class="actionButton" [routerLink]="['../complex' + '/room1']">Read More</button>
+               </mat-card-actions>
+          </mat-card>
+        </mat-tab>
       </mat-tab-group>
 
    </section>

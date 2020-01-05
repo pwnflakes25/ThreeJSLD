@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {geometries} from "../shared/geometries";
+import {ThreejsService} from "../threejs.service";
 
 
 @Component({
@@ -14,6 +15,8 @@ import {geometries} from "../shared/geometries";
 export class ItemComponent implements OnInit, AfterViewInit {
   @ViewChild('rendererContainer', {static: false}) rendererContainer: ElementRef;
   @ViewChild('canvasContainer', {static: false}) canvasContainer: ElementRef<HTMLCanvasElement>;
+  @ViewChild('itemPage', {static: false}) itemPage: ElementRef;
+
   geoList: string[];
   renderer;
   scene;
@@ -23,8 +26,9 @@ export class ItemComponent implements OnInit, AfterViewInit {
   mainObject;
   objectToDisplay;
   controls;
+  pageView;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private ts: ThreejsService) {
     this.geoList = [...geometries];
    }
 
@@ -35,44 +39,14 @@ export class ItemComponent implements OnInit, AfterViewInit {
    }
 
    ngAfterViewInit() {
-       this.setUpTHREE();
-       this.setUpLight();
-       this.setUpGeometry(this.mainObject);
-
-      //function below allow the canvas size to respond to changes in the window size
-      window.addEventListener('resize', () => {
-      this.renderer.setSize(this.canvasContainer.nativeElement.width, this.canvasContainer.nativeElement.height);
-      this.camera.aspect = this.canvasContainer.nativeElement.width/this.canvasContainer.nativeElement.height;
-      this.camera.updateProjectMatrix;
-      })
-
-       this.animate();
+       this.ts.setUpTHREE(this.canvasContainer.nativeElement); //set up THREE essential components (camera, light, renderer)
+       this.ts.addLight(); // add spotlight
+       this.ts.addControl(this.canvasContainer.nativeElement); //add camera control
+       this.ts.responsiveCanvas(this.canvasContainer.nativeElement); //make canvas responsive on page resize
+       this.setUpGeometry(this.mainObject); // add geometry to scene
+       this.ts.animate(this.objectToDisplay); // animate the whole thing
   }
 
-  // <=====  this function is responsible in setting up the THREE's environment such as scene and camera ======>
-  setUpTHREE() {
-    this.renderer = new THREE.WebGLRenderer({canvas: this.canvasContainer.nativeElement});
-    this.scene = new THREE.Scene();
-    //below sets up the camera
-    this.camera = new THREE.PerspectiveCamera(
-      75, //field of view
-      this.canvasContainer.nativeElement.width/this.canvasContainer.nativeElement.height, //dimension
-      0.1, //far plane
-      1000
-     )
-     //below change the color of background
-     this.renderer.setClearColor("#e5e5e5");
-
-     //set the renderer size
-     this.renderer.setSize(this.canvasContainer.nativeElement.width, this.canvasContainer.nativeElement.height);
-
-     //set the camera position in the z axis
-     this.camera.position.z = 5;
-
-     this.controls = new OrbitControls(this.camera, this.canvasContainer.nativeElement);
-     this.controls.minDistance = 1;
-     this.controls.maxDistance = 1000;
-  }
 
  setUpGeometry(geometry: string) {
    switch(geometry) {
@@ -102,12 +76,6 @@ export class ItemComponent implements OnInit, AfterViewInit {
    }
  }
 
- // <====== Function Below adds light to the scene =====>
- setUpLight() {
-   const spotLight = new THREE.SpotLight(0xffffff);
-   spotLight.position.set( -100, 20, 60);
-   this.scene.add(spotLight);
- }
 
  // <===== Function below adds fog to the scene====>
  setUpFog() {
@@ -124,31 +92,30 @@ export class ItemComponent implements OnInit, AfterViewInit {
     this.material = new THREE.MeshLambertMaterial({color: 0x00ffff});
     this.geometry = new THREE.BoxGeometry(2,2,2);
     this.objectToDisplay = new THREE.Mesh( this.geometry, this.material );
-    this.scene.add(this.objectToDisplay);
+    this.ts.getScene().add(this.objectToDisplay);
   }
 
   setUpSphereGeometry() {
     this.material = new THREE.MeshLambertMaterial({color: 0x00ffff});
     this.geometry = new THREE.SphereGeometry(2,40,40);
     this.objectToDisplay = new THREE.Mesh(this.geometry, this.material);
-    this.scene.add(this.objectToDisplay);
+    this.ts.getScene().add(this.objectToDisplay);
   }
 
   setUpTriangleGeometry() {}
-
 
   setUpWell() {
     var loader = new GLTFLoader();
     loader.load('/assets/well3D.glb', (gltf) => {
       this.objectToDisplay = gltf.scene;
-      this.scene.add( this.objectToDisplay );
+      this.ts.getScene().add(this.objectToDisplay);
     })
     // const box = new THREE.Box3().setFromObject(this.objectToDisplay);
     // const boxSize = box.getSize(new THREE.Vector3()).length();
     // const boxCenter = box.getCenter(new THREE.Vector3());
     // this.frameArea(boxSize * 0.5, boxSize, boxCenter);
-    this.camera.position.set(0,20,20);
-    this.camera.lookAt(0,10,0);
+    this.ts.getCamera().position.set(0,20,20);
+    this.ts.getCamera().lookAt(0,10,0);
   }
 
   setUpAnvil() {
@@ -161,22 +128,12 @@ export class ItemComponent implements OnInit, AfterViewInit {
             this.objectToDisplay = child;
           }
       })
-
-      this.scene.add(this.objectToDisplay);
+      this.ts.getScene().add(this.objectToDisplay);
       this.objectToDisplay.position.set(1,0,3);
     })
-    this.camera.position.set(1,2,8)
+    this.ts.getCamera().position.set(1,2,8)
   }
 
-
-  //<=== function below just animate the canvas ===>
-  animate() {
-  const geometry = this.objectToDisplay;
-	requestAnimationFrame(this.animate.bind(this));
-  this.rotate(geometry);
-  this.controls.update();
-	this.renderer.render( this.scene, this.camera );
- }
 
 //<=== function below rotates object ===>
  rotate(object) {
@@ -210,6 +167,8 @@ export class ItemComponent implements OnInit, AfterViewInit {
   // point the camera to look at the center of the box
   this.camera.lookAt(boxCenter.x, boxCenter.y, boxCenter.z);
 }
+
+//function below converts canvas into image
 
 
 

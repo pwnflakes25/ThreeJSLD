@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ItemComponent } from './item/item.component';
 import { HomeComponent } from './home/home.component';
+import {ScenePageComponent} from './scene-page/scene-page.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'item/:geometry',
     component: ItemComponent
+  },
+  {
+    path: 'complex/:room',
+    component: ScenePageComponent
   }
 ];
 

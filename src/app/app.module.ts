@@ -8,12 +8,15 @@ import {MatCardModule} from '@angular/material/card';
 import {MatTabsModule} from '@angular/material/tabs';
 import { ItemComponent } from './item/item.component';
 import { HomeComponent } from './home/home.component';
+import { ScenePageComponent } from './scene-page/scene-page.component';
+import {ThreejsService} from './threejs.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     ItemComponent,
-    HomeComponent
+    HomeComponent,
+    ScenePageComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +25,7 @@ import { HomeComponent } from './home/home.component';
     MatCardModule,
     MatTabsModule
   ],
-  providers: [],
+  providers: [ThreejsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
