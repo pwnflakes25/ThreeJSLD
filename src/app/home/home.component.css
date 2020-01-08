@@ -6,14 +6,15 @@ p {
 }
 
 
+
 .banner {
 width:100%;
 display: flex;
 justify-content: center;
 align-items: center;
 height: 650px;
-background: rgb(2,0,36);
-background: radial-gradient(circle, rgba(2,0,36,1) 2%, rgba(9,9,121,1) 53%, rgba(61,0,131,1) 100%);
+background: rgb(41,40,57);
+background: linear-gradient(0deg, rgba(41,40,57,1) 0%, rgba(63,63,133,1) 35%, rgba(98,144,153,1) 100%);
 clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)
 }
 
@@ -56,9 +57,16 @@ color: #FFFFFF;
 
 .example-card {
   max-width: 15rem;
-  padding-bottom: 4rem;
   margin-bottom: 2rem;
   margin-right: 2rem;
+  padding-top: 0;
+  box-shadow:
+  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+  0 12.5px 10px rgba(0, 0, 0, 0.06),
+  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+  0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+  0 100px 80px rgba(0, 0, 0, 0.12)
 }
 
 .example-header-image {
@@ -66,24 +74,36 @@ color: #FFFFFF;
   background-size: cover;
 }
 
+.displayImg {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  max-width: 15rem;
+  height: 15rem;
+  top: 0px;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-bottom: 3rem;
+  margin-top: -3rem;
+}
+
+
 .actionButton {
+  font-family: 'Alata', sans-serif;
   display: inline-block;
   float: left;
   margin-left: 1rem;
   box-sizing: content-box;
   max-width: 10rem;
-  height: 14px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 8px 20px 18px;
-  border: 1px solid #018dc4;
-  border-radius: 12px;
-  color: rgba(255,255,255,0.9);
+  font-size: 16px;
+  font-weight: 400;
+  padding: 4px 16px 4px 16px;
+  border-radius: 5px;
+  color: rgba(255,255,255,0.8);
   text-align: center;
   text-indent: -3px;
   text-overflow: clip;
-  background: linear-gradient(135deg, #182ab2 0, #182ab2 19%, #2879af 81%, #2879af 100%);
+  background: linear-gradient(0deg, rgba(41,40,57,1) 0%, rgba(63,63,133,1) 35%, rgba(98,144,153,1) 100%);
   background-position: 50% 50%;
-  box-shadow: 0px 4px 4px 0 #C0C0C0 ;
 }

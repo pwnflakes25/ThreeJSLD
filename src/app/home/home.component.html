@@ -13,96 +13,88 @@
           <div class="row cardGrid">
 
             <mat-card class="example-card col-lg-4">
+                  <div class="displayImg" [style.background-image] = "scURL ? 'url('+scURL+')' : 'url('+imgURL+')'">
+                  </div>
                  <mat-card-header>
                    <div mat-card-avatar class="example-header-image"></div>
                    <mat-card-title>Cube</mat-card-title>
                    <mat-card-subtitle>Geometry</mat-card-subtitle>
                  </mat-card-header>
-                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
                  <mat-card-content >
                    <p>
                      A Basic Cube
                    </p>
                  </mat-card-content>
                  <mat-card-actions>
-                   <button class="actionButton" [routerLink]="['../item' + '/cube']">Read More</button>
+                   <button class="actionButton" [routerLink]="['../item' + '/cube']">Open</button>
                  </mat-card-actions>
             </mat-card>
 
             <mat-card class="example-card col-lg-4">
-                 <mat-card-header>
-                   <div mat-card-avatar class="example-header-image"></div>
-                   <mat-card-title>Well</mat-card-title>
-                   <mat-card-subtitle>Geometry</mat-card-subtitle>
-                 </mat-card-header>
-                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
-                 <mat-card-content>
-                   <p>
-                     A Low-poly well
-                 </mat-card-content>
-                 <mat-card-actions>
-                   <button class="actionButton" [routerLink]="['../item' + '/well']">Read More</button>
-                 </mat-card-actions>
-            </mat-card>
-
-            <mat-card class="example-card col-lg-4">
+                 <div class="displayImg" [style.background-image] = "scURL ? 'url('+scURL+')' : 'url('+imgURL+')'">
+                 </div>
                  <mat-card-header>
                    <div mat-card-avatar class="example-header-image"></div>
                    <mat-card-title>Sphere</mat-card-title>
                    <mat-card-subtitle>Geometry</mat-card-subtitle>
                  </mat-card-header>
-                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
                  <mat-card-content>
                    <p>
                      Basic Sphere
                    </p>
                  </mat-card-content>
                  <mat-card-actions>
-                   <button class="actionButton" [routerLink]="['../item' + '/sphere']">Read More</button>
-                 </mat-card-actions>
-            </mat-card>
-
-            <mat-card class="example-card col-lg-4">
-                 <mat-card-header>
-                   <div mat-card-avatar class="example-header-image"></div>
-                   <mat-card-title>Anvil</mat-card-title>
-                   <mat-card-subtitle>Geometry</mat-card-subtitle>
-                 </mat-card-header>
-                 <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
-                 <mat-card-content>
-                   <p>
-                     A slightly rusty anvil
-                   </p>
-                 </mat-card-content>
-                 <mat-card-actions>
-                   <button class="actionButton" [routerLink]="['../item' + '/anvil']">Read More</button>
+                   <button class="actionButton" [routerLink]="['../item' + '/sphere']">Open</button>
                  </mat-card-actions>
             </mat-card>
           </div>
+        </mat-tab>
 
-
-
-
-
+        <mat-tab label="Complex Mesh">
+          <div class="row cardGrid">
+            <mat-card class="example-card col-lg-4" *ngFor="let mesh of meshes; index as i; trackBy: trackByFn">
+                <div class="displayImg" [style.background-image] = "mesh.dataURL ? 'url('+mesh.dataURL+')' : 'url('+imgURL+')'"></div>
+                 <mat-card-header>
+                   <div mat-card-avatar class="example-header-image"></div>
+                   <mat-card-title>{{mesh.title}}</mat-card-title>
+                   <mat-card-subtitle>{{mesh.type}}</mat-card-subtitle>
+                 </mat-card-header>
+                 <mat-card-content>
+                    <p>
+                    {{ mesh.description}}
+                   </p>
+                 </mat-card-content>
+                 <mat-card-actions>
+                   <button class="actionButton" [routerLink]="['../item' + '/' + i]">Open</button>
+                 </mat-card-actions>
+            </mat-card>
+          </div>
         </mat-tab>
 
         <mat-tab label="Interior">
-          <mat-card class="example-card col-lg-4">
-               <mat-card-header>
-                 <div mat-card-avatar class="example-header-image"></div>
-                 <mat-card-title>Living Room 1</mat-card-title>
-                 <mat-card-subtitle>Scene</mat-card-subtitle>
-               </mat-card-header>
-               <img mat-card-image [src]="scURL? scURL : imgURL" alt="Photo of a Shiba Inu">
-               <mat-card-content>
-                  <p>
-                   A sample of a modern living room
-                 </p>
-               </mat-card-content>
-               <mat-card-actions>
-                 <button class="actionButton" [routerLink]="['../complex' + '/room1']">Read More</button>
-               </mat-card-actions>
-          </mat-card>
+
+          <div class="row cardGrid">
+
+            <mat-card class="example-card col-lg-4" *ngFor="let room of rooms; index as i; trackBy: trackByFn">
+                <div class="displayImg" [style.background-image] = "room.dataURL ? 'url('+room.dataURL+')' : 'url('+room.imgURL+')'"></div>
+                 <mat-card-header>
+                   <div mat-card-avatar class="example-header-image"></div>
+                   <mat-card-title>{{room.title}}</mat-card-title>
+                   <mat-card-subtitle>{{room.type}}</mat-card-subtitle>
+                 </mat-card-header>
+                 <mat-card-content>
+                    <p>
+                    {{room.description}}
+                   </p>
+                 </mat-card-content>
+                 <mat-card-actions>
+                   <button class="actionButton" [routerLink]="['../complex' + '/' + i]">Open</button>
+                 </mat-card-actions>
+            </mat-card>
+
+          </div>
+
+
         </mat-tab>
       </mat-tab-group>
 

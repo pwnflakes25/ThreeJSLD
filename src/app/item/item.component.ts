@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy} from '@angular/core';
+import { ActivatedRoute, NavigationStart, NavigationEnd, Router, Event as NavigationEvent } from "@angular/router";
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {geometries} from "../shared/geometries";
 import {ThreejsService} from "../threejs.service";
+import {ConceptModel} from '../shared/concept.model';
+import {Subscription} from 'rxjs';
+import { filter } from "rxjs/operators";
 
 
 @Component({
@@ -12,29 +14,44 @@ import {ThreejsService} from "../threejs.service";
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.css']
 })
-export class ItemComponent implements OnInit, AfterViewInit {
+export class ItemComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('rendererContainer', {static: false}) rendererContainer: ElementRef;
   @ViewChild('canvasContainer', {static: false}) canvasContainer: ElementRef<HTMLCanvasElement>;
   @ViewChild('itemPage', {static: false}) itemPage: ElementRef;
 
-  geoList: string[];
+  geoList: ConceptModel[];
   renderer;
+  paramStored;
+  routeSub: Subscription;
   scene;
   camera;
   geometry;
+  mainMesh;
   material;
   mainObject;
   objectToDisplay;
   controls;
   pageView;
-
-  constructor(private route: ActivatedRoute, private ts: ThreejsService) {
-    this.geoList = [...geometries];
-   }
+  isMesh: boolean = false;
+  constructor(private route: ActivatedRoute, private ts: ThreejsService, private router:Router) {}
 
    ngOnInit() {
      this.route.paramMap.subscribe(params => {
-        this.mainObject = params.get("geometry")
+        this.paramStored = +params.get("geometry");
+        if(this.paramStored || this.paramStored === 0) {
+         this.mainMesh = this.ts.getOneMesh(this.paramStored);
+         this.isMesh = true;
+       } else {
+         this.mainObject = params.get("geometry")
+       }
+     })
+
+     this.routeSub = this.router.events
+      .pipe(
+        filter(
+                (event: NavigationEvent) => event instanceof NavigationStart))
+                   .subscribe((event) => {
+                          this.mainMesh.dataURL = this.ts.canvasToImage(this.canvasContainer.nativeElement);
      })
    }
 
@@ -43,7 +60,11 @@ export class ItemComponent implements OnInit, AfterViewInit {
        this.ts.addLight(); // add spotlight
        this.ts.addControl(this.canvasContainer.nativeElement); //add camera control
        this.ts.responsiveCanvas(this.canvasContainer.nativeElement); //make canvas responsive on page resize
-       this.setUpGeometry(this.mainObject); // add geometry to scene
+       if(this.isMesh) {
+         this.setUpGLTFModel(this.mainMesh.fileURL);
+       } else {
+         this.setUpGeometry(this.mainObject); // add geometry to scene
+       }
        this.ts.animate(this.objectToDisplay); // animate the whole thing
   }
 
@@ -60,14 +81,6 @@ export class ItemComponent implements OnInit, AfterViewInit {
      }
      case 'triangle' : {
        this.setUpTriangleGeometry();
-       break;
-     }
-     case 'well' : {
-       this.setUpWell();
-       break;
-     }
-     case 'anvil' : {
-       this.setUpAnvil();
        break;
      }
      default : {
@@ -104,35 +117,43 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
   setUpTriangleGeometry() {}
 
-  setUpWell() {
-    var loader = new GLTFLoader();
-    loader.load('/assets/well3D.glb', (gltf) => {
+  // setUpWell() {
+  //   var loader = new GLTFLoader();
+  //   loader.load('/assets/well3D.glb', (gltf) => {
+  //     this.objectToDisplay = gltf.scene;
+  //     this.ts.getScene().add(this.objectToDisplay);
+  //   })
+  //   // const box = new THREE.Box3().setFromObject(this.objectToDisplay);
+  //   // const boxSize = box.getSize(new THREE.Vector3()).length();
+  //   // const boxCenter = box.getCenter(new THREE.Vector3());
+  //   // this.frameArea(boxSize * 0.5, boxSize, boxCenter);
+  //   this.ts.getCamera().position.set(0,20,20);
+  //   this.ts.getCamera().lookAt(0,10,0);
+  // }
+
+  setUpGLTFModel(fileURL: string) {
+    let loader = new GLTFLoader();
+    loader.load(fileURL, (gltf) => {
       this.objectToDisplay = gltf.scene;
       this.ts.getScene().add(this.objectToDisplay);
     })
-    // const box = new THREE.Box3().setFromObject(this.objectToDisplay);
-    // const boxSize = box.getSize(new THREE.Vector3()).length();
-    // const boxCenter = box.getCenter(new THREE.Vector3());
-    // this.frameArea(boxSize * 0.5, boxSize, boxCenter);
-    this.ts.getCamera().position.set(0,20,20);
-    this.ts.getCamera().lookAt(0,10,0);
   }
 
-  setUpAnvil() {
-    let loader = new GLTFLoader();
-    loader.load('/assets/anvil.glb', (gltf) => {
-      //below is a for each loop for all the children of the scene
-      gltf.scene.traverse((child) => {
-      console.log(child);
-          if ( child instanceof THREE.Mesh && child.name === "Plane002") {
-            this.objectToDisplay = child;
-          }
-      })
-      this.ts.getScene().add(this.objectToDisplay);
-      this.objectToDisplay.position.set(1,0,3);
-    })
-    this.ts.getCamera().position.set(1,2,8)
-  }
+  // setUpAnvil() {
+  //   let loader = new GLTFLoader();
+  //   loader.load('/assets/anvil.glb', (gltf) => {
+  //     //below is a for each loop for all the children of the scene
+  //     gltf.scene.traverse((child) => {
+  //     console.log(child);
+  //         if ( child instanceof THREE.Mesh && child.name === "Plane002") {
+  //           this.objectToDisplay = child;
+  //         }
+  //     })
+  //     this.ts.getScene().add(this.objectToDisplay);
+  //     this.objectToDisplay.position.set(1,0,3);
+  //   })
+  //   this.ts.getCamera().position.set(1,2,8)
+  // }
 
 
 //<=== function below rotates object ===>
@@ -170,6 +191,9 @@ export class ItemComponent implements OnInit, AfterViewInit {
 
 //function below converts canvas into image
 
+ngOnDestroy() {
+  this.routeSub.unsubscribe();
+}
 
 
 }

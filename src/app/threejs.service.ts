@@ -1,6 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {ConceptModel} from './shared/concept.model';
 
 
 
@@ -15,8 +16,32 @@ control;
 element;
 imageURL;
 canvasData;
+indexOfMesh;
+GLTFMeshes: ConceptModel[] = [
+  new ConceptModel('Poly Well', 'GLTF Mesh', 'A low-poly well', '/assets/well3D.glb', 'https://cdn.pixabay.com/photo/2016/09/09/07/47/cube-1656301_960_720.png'),
+  new ConceptModel('Rusty Anvil', 'GLTF Mesh', 'A rusty iron anvil', '/assets/anvil.glb', 'https://cdn.pixabay.com/photo/2016/09/09/07/47/cube-1656301_960_720.png'),
+];
+GLTFScene: ConceptModel[] = [
+  new ConceptModel('Interior House', 'GLTF Scene', 'A Simple Living Room', '/assets/room1.glb', 'https://cdn.pixabay.com/photo/2016/09/09/07/47/cube-1656301_960_720.png')
+];
 
   constructor() {}
+
+ getRooms() {
+   return [...this.GLTFScene];
+ }
+
+ getOneRoom(index) {
+   return [...this.GLTFScene][index];
+ }
+
+ getMeshes() {
+   return [...this.GLTFMeshes]
+ }
+
+ getOneMesh(i: number) {
+   return this.GLTFMeshes[i];
+ }
 
  getScene() {
    return this.scene;
@@ -86,22 +111,18 @@ canvasData;
   animate(scene) {
   const scenery = scene;
   requestAnimationFrame(this.animate.bind(this));
-  this.canvasToImage(this.canvasData)
   this.control.update();
   this.renderer.render( this.scene, this.camera );
  }
 
- // storeCanvasImage(imageURL) {
- //   this.imageURL = imageURL;
- // }
 
 getImageURL() {
   return this.imageURL;
 }
 
 canvasToImage(canvas) {
-  let dataURL = canvas.toDataURL("image/jpeg");
-  this.imageURL = dataURL;
+  let dataURL = canvas.toDataURL("image/png");
+  return dataURL;
 }
 
 

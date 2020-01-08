@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit} from '@angular/core';
 import {ThreejsService} from '../threejs.service';
-
+import {ConceptModel} from "../shared/concept.model";
 
 @Component({
   selector: 'app-home',
@@ -9,14 +9,18 @@ import {ThreejsService} from '../threejs.service';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 imgURL = "https://cdn.pixabay.com/photo/2016/09/09/07/47/cube-1656301_960_720.png"
-scURL: string;
+scURL: string = null;
+meshes: ConceptModel[];
+rooms: ConceptModel[];
+
   constructor(private ts: ThreejsService) {}
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
+    this.meshes = this.ts.getMeshes();
+    this.rooms = this.ts.getRooms();
     this.scURL = this.ts.getImageURL();
   }
 
+  ngAfterViewInit() {
+  }
 }
